@@ -1,6 +1,6 @@
 COVERAGE_FILE ?= coverage.out
 
-TARGET ?= run # CHANGE THIS TO YOUR BINARY NAME
+TARGET ?= hangman
 
 .PHONY: build
 build:
