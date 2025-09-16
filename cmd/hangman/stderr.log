@@ -1,0 +1,15 @@
+setUpLevel: readInt: failed to convert input to int: strconv.Atoi: parsing "dwadaw": invalid syntax
+setUpLevel: readInt: failed to convert input to int: strconv.Atoi: parsing "ddawdaw": invalid syntax
+setUpLevel: readInt: failed to convert input to int: strconv.Atoi: parsing "da": invalid syntax
+setUpLevel: readInt: failed to convert input to int: strconv.Atoi: parsing "dc": invalid syntax
+setUpLevel: readInt: failed to convert input to int: strconv.Atoi: parsing "aw": invalid syntax
+setUpLevel: readInt: failed to convert input to int: strconv.Atoi: parsing "d": invalid syntax
+setUpLevel: readInt: failed to convert input to int: strconv.Atoi: parsing "a": invalid syntax
+setUpLevel: readInt: failed to convert input to int: strconv.Atoi: parsing "s b'vsr'h'srh": invalid syntax
+setUpLevel: readInt: failed to convert input to int: strconv.Atoi: parsing "sr": invalid syntax
+setUpLevel: readInt: failed to convert input to int: strconv.Atoi: parsing "": invalid syntax
+setUpLevel: readInt: failed to convert input to int: strconv.Atoi: parsing "": invalid syntax
+setUpLevel: readInt: failed to convert input to int: strconv.Atoi: parsing "": invalid syntax
+setUpLevel: readInt: failed to convert input to int: strconv.Atoi: parsing "": invalid syntax
+setUpLevel: readInt: failed to convert input to int: strconv.Atoi: parsing "": invalid syntax
+setUpLevel: readInt: failed to read input: readChoice: failed to read input: read /dev/stdin: input/output error
