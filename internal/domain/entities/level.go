@@ -4,31 +4,46 @@ import (
 	"errors"
 )
 
-// TODO: Подумать про рандом.
-type Level string
+type Level int
 
 const (
-	LevelEasy   Level = "Easy"
-	LevelMedium Level = "Medium"
-	LevelHard   Level = "Hard"
+	LevelEasy Level = iota + 1
+	LevelMedium
+	LevelHard
 )
 
-var (
-	levels   = []Level{LevelEasy, LevelMedium, LevelHard}
-	attempts = map[Level]int{
-		LevelEasy:   10,
-		LevelMedium: 8,
-		LevelHard:   6,
+var levelNames = map[Level]string{
+	LevelEasy:   "Easy",
+	LevelMedium: "Medium",
+	LevelHard:   "Hard",
+}
+
+var levelAttempts = map[Level]int{
+	LevelEasy:   10,
+	LevelMedium: 8,
+	LevelHard:   6,
+}
+
+func (l Level) String() string {
+	if name, ok := levelNames[l]; ok {
+		return name
 	}
-)
+	return "Unknown"
+}
+
+func (l Level) IsValid() bool {
+	_, ok := levelNames[l]
+	return ok 
+}
 
 func (l Level) Attempts() (int, error) {
-	if n, ok := attempts[l]; ok {
-		return n, nil
+	if attempts, ok := levelAttempts[l]; ok {
+		return attempts, nil
 	}
-	return -1, errors.New("unknown level")
+
+	return 0, errors.New("invalid level")
 }
 
 func AllLevels() []Level {
-	return append([]Level(nil), levels...)
+	return []Level{LevelEasy, LevelMedium, LevelHard}
 }

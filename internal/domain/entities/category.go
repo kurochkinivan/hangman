@@ -1,16 +1,33 @@
 package entities
 
-// TODO: Подумать про рандом.
-type Category string
+type Category int 
 
 const (
-	CategoryAnimals          Category = "Animals"
-	CategoryFruitsVegetables Category = "Fruits & Vegetables"
-	CategoryCountries        Category = "Countries"
+	CategoryAnimals Category = iota + 1
+	CategoryFruitsVegetables
+	CategoryCountries
 )
 
-var categories = []Category{CategoryAnimals, CategoryFruitsVegetables, CategoryCountries}
+var categoryNames = map[Category]string{
+	CategoryAnimals:          "Animals",
+	CategoryFruitsVegetables: "Fruits & Vegetables",
+	CategoryCountries:        "Countries",
+}
+
+func (c Category) String() string {
+	if name, ok := categoryNames[c]; ok {
+		return name
+	}
+	return "Unknown"
+}
+
+func (c Category) IsValid() bool {
+	_, ok := categoryNames[c]
+	return ok 
+}
 
 func AllCategories() []Category {
-	return append([]Category(nil), categories...)
+	return []Category{CategoryAnimals, CategoryFruitsVegetables, CategoryCountries}
 }
+
+
