@@ -2,9 +2,18 @@ package entities
 
 import (
 	"errors"
+	"slices"
 	"strings"
 	"unicode"
 	"unicode/utf8"
+)
+
+type GameStatus int
+
+const (
+	GameStatusInProgress GameStatus = iota + 1
+	GameStatusWon
+	GameStatusLost
 )
 
 type Game struct {
@@ -69,3 +78,55 @@ func (g *Game) IsLetterGuessed(r rune) bool {
 	_, used := g.guessedLetters[r]
 	return used
 }
+
+func (g *Game) GuessedLetters() []rune {
+	letters := make([]rune, 0, len(g.guessedLetters))
+
+	for letter := range g.guessedLetters {
+		letters = append(letters, letter)
+	}
+
+	slices.Sort(letters)
+
+	return letters
+}
+
+func (g *Game) RemainingAttempts() int {
+	remaining := g.config.MaxAttempts() - g.wrongAttempts
+	if remaining < 0 {
+		return 0
+	}
+	return remaining
+}
+
+func (g *Game) Status() GameStatus {
+	if g.wrongAttempts >= g.config.MaxAttempts() {
+		return GameStatusLost
+	}
+
+	for _, char := range g.word.Value() {
+		if char != ' ' && !g.IsLetterGuessed(char) {
+			return GameStatusInProgress
+		}
+	}
+
+	return GameStatusWon
+}
+
+func (g *Game) Word() *Word {
+	return g.word
+}
+
+func (g *Game) Config() *GameConfig {
+	return g.config
+}
+
+/*
+
+Очевидно, что лучше вынести логику из infrastracture/terminal
+
+Как это сделать?
+
+Где-то должен создаться и ХРАНИТЬСЯ инстанс игры.
+
+*/
