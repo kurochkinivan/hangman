@@ -1,7 +1,8 @@
 package entities
 
 import (
-	"errors"
+	"math"
+	"math/rand/v2"
 )
 
 type Level int
@@ -10,40 +11,55 @@ const (
 	LevelEasy Level = iota + 1
 	LevelMedium
 	LevelHard
+	LevelRandom
+	LevelUnknown
 )
 
 var levelNames = map[Level]string{
-	LevelEasy:   "Easy",
-	LevelMedium: "Medium",
-	LevelHard:   "Hard",
+	LevelEasy:    "Easy",
+	LevelMedium:  "Medium",
+	LevelHard:    "Hard",
+	LevelRandom:  "Random",
 }
 
-var levelAttempts = map[Level]int{
-	LevelEasy:   10,
-	LevelMedium: 8,
-	LevelHard:   6,
+func (l Level) IsValid() bool {
+	_, ok := levelNames[l]
+	return ok
 }
 
 func (l Level) String() string {
 	if name, ok := levelNames[l]; ok {
 		return name
 	}
-	return "Unknown"
+	return "Invalid level"
 }
 
-func (l Level) IsValid() bool {
-	_, ok := levelNames[l]
-	return ok 
-}
-
-func (l Level) Attempts() (int, error) {
-	if attempts, ok := levelAttempts[l]; ok {
-		return attempts, nil
+func (l Level) Attempts() int {
+	switch l {
+	case LevelEasy:
+		return 7
+	case LevelMedium:
+		return 6
+	case LevelHard:
+		return 5
+	case LevelUnknown:
+		return math.MaxInt32
+	default:
+		return 0
 	}
-
-	return 0, errors.New("invalid level")
 }
 
 func AllLevels() []Level {
-	return []Level{LevelEasy, LevelMedium, LevelHard}
+	levels := make([]Level, 0, len(levelNames))
+
+	for level := range levelNames {
+		levels = append(levels, level)
+	}
+
+	return levels
+}
+
+func RandomLevel() Level {
+	levels := []Level{LevelEasy, LevelMedium, LevelHard}
+	return levels[rand.IntN(len(levels))]
 }
