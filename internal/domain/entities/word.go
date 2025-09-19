@@ -3,24 +3,25 @@ package entities
 import "strings"
 
 type Word struct {
-	value    string
-	level    Level
-	category Category
+	value string
+	hint  string
 }
 
-func NewWord(value string, level Level, category Category) *Word {
+func NewWord(value string, hint string) *Word {
 	return &Word{
-		value:    strings.ToLower(value),
-		level:    level,
-		category: category,
+		value: strings.ToLower(value),
+		hint:  hint,
 	}
 }
 
-func (w *Word) Value() string {
+func (w Word) Value() string {
 	return w.value
 }
 
-func (w *Word) Contains(r rune) bool {
-	return strings.ContainsRune(w.value, r)
+func (w Word) Hint() string {
+	return w.hint
 }
 
+func (w Word) Contains(r rune) bool {
+	return strings.ContainsRune(w.value, r)
+}
