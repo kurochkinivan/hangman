@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func (g *GameHandler) prepareScreen() {
+func (g *GameHandler) refreshScreen() {
 	g.clearTerminal()
 	g.printBanner()
 }
@@ -31,17 +31,17 @@ func (g *GameHandler) clearTerminal() {
 	}
 }
 
-func (g *GameHandler) readChoice() (string, error) {
+func (g *GameHandler) readString() (string, error) {
 	l, err := g.reader.ReadString('\n')
 	if err != nil {
-		return "", fmt.Errorf("readChoice: failed to read input: %w", err)
+		return "", fmt.Errorf("readString: failed to read input: %w", err)
 	}
 
 	return strings.TrimSpace(l), nil
 }
 
 func (g *GameHandler) readInt() (int, error) {
-	l, err := g.readChoice()
+	l, err := g.readString()
 	if err != nil {
 		return -1, fmt.Errorf("readInt: failed to read input: %w", err)
 	}
