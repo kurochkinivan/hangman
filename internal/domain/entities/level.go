@@ -3,6 +3,7 @@ package entities
 import (
 	"math"
 	"math/rand/v2"
+	"slices"
 )
 
 type Level int
@@ -15,21 +16,34 @@ const (
 	LevelUnknown
 )
 
-var levelNames = map[Level]string{
-	LevelEasy:    "Easy",
-	LevelMedium:  "Medium",
-	LevelHard:    "Hard",
-	LevelRandom:  "Random",
-}
+var (
+	allLevels        = []Level{LevelEasy, LevelMedium, LevelHard, LevelRandom, LevelUnknown} // все существующие
+	selectableLevels = []Level{LevelEasy, LevelMedium, LevelHard, LevelRandom}               // то, что можно выбрать
+	playableLevels   = []Level{LevelEasy, LevelMedium, LevelHard}
+)
 
 func (l Level) IsValid() bool {
-	_, ok := levelNames[l]
-	return ok
+	return slices.Contains(allLevels, l)
+}
+
+func AllLevels() []Level {
+	return selectableLevels
+}
+
+func RandomLevel() Level {
+	return playableLevels[rand.IntN(len(playableLevels))]
 }
 
 func (l Level) String() string {
-	if name, ok := levelNames[l]; ok {
-		return name
+	switch l {
+	case LevelEasy:
+		return "Easy"
+	case LevelMedium:
+		return "Medium"
+	case LevelHard:
+		return "Hard"
+	case LevelRandom:
+		return "Random"
 	}
 	return "Invalid level"
 }
@@ -47,19 +61,4 @@ func (l Level) Attempts() int {
 	default:
 		return 0
 	}
-}
-
-func AllLevels() []Level {
-	levels := make([]Level, 0, len(levelNames))
-
-	for level := range levelNames {
-		levels = append(levels, level)
-	}
-
-	return levels
-}
-
-func RandomLevel() Level {
-	levels := []Level{LevelEasy, LevelMedium, LevelHard}
-	return levels[rand.IntN(len(levels))]
 }

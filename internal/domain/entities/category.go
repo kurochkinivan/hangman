@@ -1,6 +1,9 @@
 package entities
 
-import "math/rand/v2"
+import (
+	"math/rand/v2"
+	"slices"
+)
 
 type Category int
 
@@ -12,36 +15,34 @@ const (
 	CategoryUnknown
 )
 
-var categoryNames = map[Category]string{
-	CategoryAnimals:          "Animals",
-	CategoryFruitsVegetables: "Fruits & Vegetables",
-	CategoryCountries:        "Countries",
-	CategoryRandom:           "Random",
-}
-
-func (c Category) String() string {
-	if name, ok := categoryNames[c]; ok {
-		return name
-	}
-	return "Invalid category"
-}
+var (
+	allCategories        = []Category{CategoryAnimals, CategoryFruitsVegetables, CategoryCountries, CategoryRandom, CategoryUnknown} // все существующие
+	selectableCategories = []Category{CategoryAnimals, CategoryFruitsVegetables, CategoryCountries, CategoryRandom}                  // то, что можно выбрать
+	playableCategories   = []Category{CategoryAnimals, CategoryFruitsVegetables, CategoryCountries}                                  // реальные категории
+)
 
 func (c Category) IsValid() bool {
-	_, ok := categoryNames[c]
-	return ok
+	return slices.Contains(allCategories, c)
 }
 
 func AllCategories() []Category {
-	categories := make([]Category, 0, len(categoryNames))
-
-	for category := range categoryNames {
-		categories = append(categories, category)
-	}
-
-	return categories
+	return selectableCategories
 }
 
 func RandomCategory() Category {
-	categories := []Category{CategoryAnimals, CategoryFruitsVegetables, CategoryCountries}
-	return categories[rand.IntN(len(categories))]
+	return playableCategories[rand.IntN(len(playableCategories))]
+}
+
+func (c Category) String() string {
+	switch c {
+	case CategoryAnimals:
+		return "Animals"
+	case CategoryFruitsVegetables:
+		return "Fruits & Vegetables"
+	case CategoryCountries:
+		return "Countries"
+	case CategoryRandom:
+		return "Random"
+	}
+	return "Invalid category"
 }
