@@ -4,20 +4,10 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
-type mockLevel struct {
-	attempts int
-}
-
-func (l mockLevel) Attempts() (int, error) {
-	return l.attempts, nil
-}
-
-func (l mockLevel) IsValid() bool {
-	return true
-}
-
+// Нужен ли этот тест? 
 func TestNewGameValidation(t *testing.T) {
 	tests := []struct {
 		name    string
@@ -48,8 +38,10 @@ func TestNewGameValidation(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			_, err := NewGame(tt.word, tt.config)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("expected error = %t, got %v", tt.wantErr, err)
+			if tt.wantErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
 			}
 		})
 	}
@@ -135,7 +127,7 @@ func TestGameFlow(t *testing.T) {
 			g, err := NewGame(w, &GameConfig{
 				maxAttempts: tt.maxAttempts,
 			})
-			assert.Nil(t, err)
+			require.NoError(t, err)
 
 			for _, guess := range tt.guesses {
 				g.GuessLetter(guess)
