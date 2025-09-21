@@ -57,6 +57,10 @@ func (gs *GameService) StartNewGame() error {
 }
 
 func (gs *GameService) SimulateGame(word string, guessed string) (dto.GameResult, error) {
+	if len(word) != len(guessed) {
+		return dto.GameResult{}, errors.New("lengths of given word and guessed word do not match")
+	}
+
 	cfg, err := entities.NewGameConfig(entities.LevelUnknown, entities.CategoryUnknown)
 	if err != nil {
 		return dto.GameResult{}, fmt.Errorf("failed to create new game config: %w", err)
