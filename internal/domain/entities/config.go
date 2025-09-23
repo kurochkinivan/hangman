@@ -59,7 +59,3 @@ func (gc *GameConfig) SetLevel(level Level) error {
 func (gc *GameConfig) MaxAttempts() int {
 	return gc.maxAttempts
 }
-
-func UnlimitedConfig() {
-	
-}
