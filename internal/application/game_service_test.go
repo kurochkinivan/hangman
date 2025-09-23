@@ -192,6 +192,14 @@ func TestSimulateGame(t *testing.T) {
 			wantIsWon:    true,
 			wantWordMask: "окок",
 		},
+		{
+			name:         "different languages",
+			word:         "мама",
+			guessed:      "mama",
+			wantErr:      false,
+			wantIsWon:    false,
+			wantWordMask: "****",
+		},
 	}
 
 	gs := &GameService{}

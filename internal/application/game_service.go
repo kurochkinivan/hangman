@@ -57,7 +57,7 @@ func (gs *GameService) StartNewGame() error {
 }
 
 func (gs *GameService) SimulateGame(word string, guessed string) (dto.GameResult, error) {
-	if len(word) != len(guessed) {
+	if utf8.RuneCountInString(word) != utf8.RuneCountInString(guessed) {
 		return dto.GameResult{}, errors.New("lengths of given word and guessed word do not match")
 	}
 
