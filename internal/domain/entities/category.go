@@ -16,17 +16,17 @@ const (
 )
 
 var (
-	allCategories        = []Category{CategoryAnimals, CategoryFruitsVegetables, CategoryCountries, CategoryRandom, CategoryUnknown} // все существующие
-	selectableCategories = []Category{CategoryAnimals, CategoryFruitsVegetables, CategoryCountries, CategoryRandom}                  // то, что можно выбрать
-	playableCategories   = []Category{CategoryAnimals, CategoryFruitsVegetables, CategoryCountries}                                  // реальные категории
+	allCategories      = []Category{CategoryAnimals, CategoryFruitsVegetables, CategoryCountries, CategoryRandom, CategoryUnknown} // all existing categories
+	playableCategories = []Category{CategoryAnimals, CategoryFruitsVegetables, CategoryCountries}
 )
 
 func (c Category) IsValid() bool {
 	return slices.Contains(allCategories, c)
 }
 
+// AllCategories() returns a list of categories the user can choose.
 func AllCategories() []Category {
-	return selectableCategories
+	return []Category{CategoryAnimals, CategoryFruitsVegetables, CategoryCountries, CategoryRandom}
 }
 
 func RandomCategory() Category {

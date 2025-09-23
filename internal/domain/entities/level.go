@@ -17,17 +17,17 @@ const (
 )
 
 var (
-	allLevels        = []Level{LevelEasy, LevelMedium, LevelHard, LevelRandom, LevelUnknown} // все существующие
-	selectableLevels = []Level{LevelEasy, LevelMedium, LevelHard, LevelRandom}               // то, что можно выбрать
-	playableLevels   = []Level{LevelEasy, LevelMedium, LevelHard}
+	allLevels        = []Level{LevelEasy, LevelMedium, LevelHard, LevelRandom, LevelUnknown} // all existing levels
+	playableLevels   = []Level{LevelEasy, LevelMedium, LevelHard} 
 )
 
 func (l Level) IsValid() bool {
 	return slices.Contains(allLevels, l)
 }
 
+// AllLevels returns the list of levels that the user can choose.
 func AllLevels() []Level {
-	return selectableLevels
+	return []Level{LevelEasy, LevelMedium, LevelHard, LevelRandom}
 }
 
 func RandomLevel() Level {
