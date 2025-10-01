@@ -1,7 +1,7 @@
 package entities
 
 import (
-	"errors"
+	apperr "gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/lib/appErr"
 )
 
 type GameConfig struct {
@@ -12,11 +12,11 @@ type GameConfig struct {
 
 func NewGameConfig(level Level, category Category) (*GameConfig, error) {
 	if !level.IsValid() {
-		return nil, errors.New("invalid level")
+		return nil, apperr.NewAppErr("NewGameConfig", "invalid level")
 	}
 
 	if !category.IsValid() {
-		return nil, errors.New("invalid category")
+		return nil, apperr.NewAppErr("NewGameConfig", "invalid category")
 	}
 
 	return &GameConfig{
@@ -32,14 +32,13 @@ func (gc *GameConfig) Category() Category {
 
 func (gc *GameConfig) SetCategory(category Category) error {
 	if !category.IsValid() {
-		return errors.New("invalid category")
+		return apperr.NewAppErr("NewGameConfig", "invalid category")
 	}
 
-	gc.category = category 
-	
-	return nil 
-} 
+	gc.category = category
 
+	return nil
+}
 
 func (gc *GameConfig) Level() Level {
 	return gc.level
@@ -47,14 +46,14 @@ func (gc *GameConfig) Level() Level {
 
 func (gc *GameConfig) SetLevel(level Level) error {
 	if !level.IsValid() {
-		return errors.New("invalid level")
+		return apperr.NewAppErr("NewGameConfig", "invalid level")
 	}
 
-	gc.level = level 
+	gc.level = level
 	gc.maxAttempts = level.Attempts()
 
-	return nil 
-} 
+	return nil
+}
 
 func (gc *GameConfig) MaxAttempts() int {
 	return gc.maxAttempts

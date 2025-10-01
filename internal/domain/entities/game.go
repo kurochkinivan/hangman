@@ -1,11 +1,12 @@
 package entities
 
 import (
-	"errors"
 	"slices"
 	"strings"
 	"unicode"
 	"unicode/utf8"
+
+	apperr "gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/lib/appErr"
 )
 
 type GameStatus int
@@ -25,11 +26,11 @@ type Game struct {
 
 func NewGame(word *Word, config *GameConfig) (*Game, error) {
 	if word == nil {
-		return nil, errors.New("word cannot be nil")
+		return nil, apperr.NewAppErr("NewGame", "word cannot be nil")
 	}
 
 	if config == nil {
-		return nil, errors.New("config cannot be nil")
+		return nil, apperr.NewAppErr("NewGame", "config cannot be nil")
 	}
 
 	return &Game{

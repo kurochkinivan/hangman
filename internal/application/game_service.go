@@ -1,13 +1,13 @@
 package application
 
 import (
-	"errors"
 	"fmt"
 	"unicode"
 	"unicode/utf8"
 
 	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/application/dto"
 	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/domain/entities"
+	apperr "gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/lib/appErr"
 )
 
 type GameService struct {
@@ -58,7 +58,7 @@ func (gs *GameService) StartNewGame() error {
 
 func (gs *GameService) SimulateGame(word string, guessed string) (dto.GameResult, error) {
 	if utf8.RuneCountInString(word) != utf8.RuneCountInString(guessed) {
-		return dto.GameResult{}, errors.New("lengths of given word and guessed word do not match")
+		return dto.GameResult{}, apperr.NewAppErr("GameService.SimulateGame", "lengths of given word and guessed word do not match")
 	}
 
 	cfg, err := entities.NewGameConfig(entities.LevelUnknown, entities.CategoryUnknown)
@@ -91,7 +91,7 @@ func (gs *GameService) loadGame(word *dto.Word, gameConfig *entities.GameConfig)
 
 func (gs *GameService) GuessLetter(input string) (dto.UserMessage, error) {
 	if utf8.RuneCountInString(input) != 1 {
-		return dto.InvalidInput, errors.New("rune count in input has to be 1")
+		return dto.InvalidInput, apperr.NewAppErr("GameService.GuessLetter", "rune count in input has to be 1")
 	}
 
 	r, size := utf8.DecodeRuneInString(input)
@@ -99,11 +99,11 @@ func (gs *GameService) GuessLetter(input string) (dto.UserMessage, error) {
 		if size == 1 {
 			return dto.InvalidInput, fmt.Errorf("invalid encoding, failed to decode %q", input)
 		}
-		return dto.InvalidInput, errors.New("input is empty")
+		return dto.InvalidInput, apperr.NewAppErr("GameService.GuessLetter", "input is empty")
 	}
 
 	if !unicode.IsLetter(r) {
-		return dto.InvalidInput, errors.New("rune has to be letter")
+		return dto.InvalidInput, apperr.NewAppErr("GameService.GuessLetter", "rune has to be letter")
 	}
 
 	if gs.game.IsLetterGuessed(r) {

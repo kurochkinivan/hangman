@@ -1,11 +1,11 @@
 package wordslist
 
 import (
-	"errors"
 	"math/rand/v2"
 
 	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/application/dto"
 	ent "gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/domain/entities"
+	apperr "gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/lib/appErr"
 )
 
 type WordEntry struct {
@@ -87,16 +87,16 @@ func NewRepository() *Repository {
 func (r *Repository) RandomWord(config *ent.GameConfig) (*dto.Word, error) {
 	categoryWords, ok := r.wordsMap[config.Category()]
 	if !ok {
-		return nil, errors.New("category not found")
+		return nil, apperr.NewAppErr("Repository.RandomWord", "category not found")
 	}
 
 	levelWords, ok := categoryWords[config.Level()]
 	if !ok {
-		return nil, errors.New("level not found")
+		return nil, apperr.NewAppErr("Repository.RandomWord", "level not found")
 	}
 
 	if len(levelWords) == 0 {
-		return nil, errors.New("no words are available for this category and level")
+		return nil, apperr.NewAppErr("Repository.RandomWord", "no words are available for this category and level")
 	}
 
 	wordEntry := levelWords[rand.IntN(len(levelWords))]
