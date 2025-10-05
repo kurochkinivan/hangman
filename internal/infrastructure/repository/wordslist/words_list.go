@@ -5,7 +5,6 @@ import (
 
 	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/domain/entities"
 	ent "gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/domain/entities"
-	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/lib/errs"
 )
 
 type Repository struct {
@@ -36,7 +35,7 @@ func (r *Repository) RandomWord(level ent.Level, category ent.Category) (entitie
 	}
 
 	if len(levelWords) == 0 {
-		return entities.Word{}, errs.NewAppErr("Repository.RandomWord", "no words are available for this category and level")
+		return entities.Word{}, fmt.Errorf("no words are available for this category and level")
 	}
 
 	wordEntry := r.randSel.Choose(levelWords)
