@@ -5,8 +5,6 @@ import (
 	"strings"
 	"unicode"
 	"unicode/utf8"
-
-	apperr "gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/lib/appErr"
 )
 
 type GameStatus int
@@ -18,27 +16,19 @@ const (
 )
 
 type Game struct {
-	word           *Word
-	config         *GameConfig
+	word           Word
 	guessedLetters map[rune]bool
+	maxAttempts    int
 	wrongAttempts  int
 }
 
-func NewGame(word *Word, config *GameConfig) (*Game, error) {
-	if word == nil {
-		return nil, apperr.NewAppErr("NewGame", "word cannot be nil")
-	}
-
-	if config == nil {
-		return nil, apperr.NewAppErr("NewGame", "config cannot be nil")
-	}
-
+func NewGame(word Word, maxAttempts int) *Game {
 	return &Game{
 		word:           word,
-		config:         config,
 		guessedLetters: make(map[rune]bool),
+		maxAttempts:    maxAttempts,
 		wrongAttempts:  0,
-	}, nil
+	}
 }
 
 func (g *Game) GuessLetter(r rune) bool {
@@ -47,14 +37,13 @@ func (g *Game) GuessLetter(r rune) bool {
 	if g.IsLetterGuessed(r) {
 		return false
 	}
-
 	g.guessedLetters[r] = true
 
 	if g.word.Contains(r) {
 		return true
 	}
-
 	g.wrongAttempts++
+
 	return false
 }
 
@@ -93,7 +82,7 @@ func (g *Game) GuessedLetters() []rune {
 }
 
 func (g *Game) RemainingAttempts() int {
-	remaining := g.config.MaxAttempts() - g.wrongAttempts
+	remaining := g.maxAttempts - g.wrongAttempts
 	if remaining < 0 {
 		return 0
 	}
@@ -101,7 +90,7 @@ func (g *Game) RemainingAttempts() int {
 }
 
 func (g *Game) Status() GameStatus {
-	if g.wrongAttempts >= g.config.MaxAttempts() {
+	if g.wrongAttempts >= g.maxAttempts {
 		return GameStatusLost
 	}
 
@@ -114,20 +103,14 @@ func (g *Game) Status() GameStatus {
 	return GameStatusWon
 }
 
-func (g *Game) Word() *Word {
+func (g *Game) IsWon() bool {
+	return g.Status() == GameStatusWon
+}
+
+func (g *Game) InProgress() bool {
+	return g.Status() == GameStatusInProgress
+}
+
+func (g *Game) Word() Word {
 	return g.word
 }
-
-func (g *Game) Config() *GameConfig {
-	return g.config
-}
-
-/*
-
-Очевидно, что лучше вынести логику из infrastracture/terminal
-
-Как это сделать?
-
-Где-то должен создаться и ХРАНИТЬСЯ инстанс игры.
-
-*/
