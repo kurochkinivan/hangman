@@ -4,48 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
-
-// Нужен ли этот тест? 
-func TestNewGameValidation(t *testing.T) {
-	tests := []struct {
-		name    string
-		word    *Word
-		config  *GameConfig
-		wantErr bool
-	}{
-		{
-			name:    "nil word",
-			word:    nil,
-			config:  &GameConfig{},
-			wantErr: true,
-		},
-		{
-			name:    "nil config",
-			word:    &Word{},
-			config:  nil,
-			wantErr: true,
-		},
-		{
-			name:    "valid",
-			word:    &Word{},
-			config:  &GameConfig{},
-			wantErr: false,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			_, err := NewGame(tt.word, tt.config)
-			if tt.wantErr {
-				assert.Error(t, err)
-			} else {
-				assert.NoError(t, err)
-			}
-		})
-	}
-}
 
 func TestGameFlow(t *testing.T) {
 	tests := []struct {
@@ -124,10 +83,7 @@ func TestGameFlow(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			w := NewWord(tt.word, "")
 
-			g, err := NewGame(w, &GameConfig{
-				maxAttempts: tt.maxAttempts,
-			})
-			require.NoError(t, err)
+			g := NewGame(w, tt.maxAttempts)
 
 			for _, guess := range tt.guesses {
 				g.GuessLetter(guess)
