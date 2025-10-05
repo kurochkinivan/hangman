@@ -1,0 +1,92 @@
+animals:
+  easy:
+    - word: cat
+      hint: domestic pet
+    - word: dog
+      hint: man's best friend
+    - word: cow
+      hint: gives milk
+    - word: pig
+      hint: lives on a farm
+
+  medium:
+    - word: lion
+      hint: king of the jungle
+    - word: tiger
+      hint: striped predator
+    - word: zebra
+      hint: striped horse
+    - word: giraffe
+      hint: long neck
+
+  hard:
+    - word: elephant
+      hint: largest land animal
+    - word: rhinoceros
+      hint: has a horn
+    - word: hippopotamus
+      hint: lives near rivers
+    - word: kangaroo
+      hint: jumps and has a pouch
+
+fruits_vegetables:
+  easy:
+    - word: apple
+      hint: keeps the doctor away
+    - word: pear
+      hint: bell-shaped fruit
+    - word: plum
+      hint: small purple fruit
+    - word: carrot
+      hint: orange vegetable
+
+  medium:
+    - word: banana
+      hint: yellow curved fruit
+    - word: orange
+      hint: citrus fruit
+    - word: pepper
+      hint: can be sweet or spicy
+    - word: potato
+      hint: grows underground
+
+  hard:
+    - word: pomegranate
+      hint: many red seeds inside
+    - word: asparagus
+      hint: green spring vegetable
+    - word: artichoke
+      hint: edible flower bud
+    - word: cucumber
+      hint: green salad vegetable
+
+countries:
+  easy:
+    - word: egypt
+      hint: pyramids
+    - word: india
+      hint: Taj Mahal
+    - word: italy
+      hint: pizza & pasta
+    - word: china
+      hint: Great Wall
+
+  medium:
+    - word: canada
+      hint: maple leaf
+    - word: germany
+      hint: beer & sausages
+    - word: brazil
+      hint: Rio carnival
+    - word: japan
+      hint: samurai & sushi
+
+  hard:
+    - word: australia
+      hint: kangaroos and koalas
+    - word: kazakhstan
+      hint: largest landlocked country
+    - word: singapore
+      hint: city-state in Asia
+    - word: switzerland
+      hint: Alps and chocolate
