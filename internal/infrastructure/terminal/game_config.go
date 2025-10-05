@@ -3,6 +3,8 @@ package terminal
 import (
 	"fmt"
 	"os"
+
+	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/domain/entities"
 )
 
 func (gh *GameHandler) setUpGameConfig() error {
@@ -22,12 +24,12 @@ func (gh *GameHandler) setUpLevel() error {
 
 	fmt.Println("Select difficulty level.")
 
-	levels := gh.gameUseCase.Levels()
+	levels := entities.AllLevels()
 	for i, l := range levels {
-		fmt.Printf("[%d] %s\n", i+1, l.Name)
+		fmt.Printf("[%d] %s\n", i+1, l.String())
 	}
 
-	var levelID int
+	var level entities.Level
 	for {
 		fmt.Println(EnterYourChoiceMsg)
 
@@ -38,14 +40,15 @@ func (gh *GameHandler) setUpLevel() error {
 		}
 
 		if 0 < idx && idx <= len(levels) {
-			levelID = levels[idx-1].ID
+			level = levels[idx-1]
 			break
 		} else {
 			fmt.Println(InvalidInputMsg)
 		}
 	}
+	gh.config.SetLevel(level)
 
-	return gh.gameUseCase.SetUpLevel(levelID)
+	return nil
 }
 
 func (gh *GameHandler) setUpCategory() error {
@@ -53,12 +56,12 @@ func (gh *GameHandler) setUpCategory() error {
 
 	fmt.Println("Select words category.")
 
-	categories := gh.gameUseCase.Categories()
-	for i, c := range categories {
-		fmt.Printf("[%d] %s\n", i+1, c.Name)
+	categories := entities.AllCategories()
+	for i, cat := range categories {
+		fmt.Printf("[%d] %s\n", i+1, cat.String())
 	}
 
-	var categoryID int
+	var category entities.Category
 	for {
 		fmt.Println(EnterYourChoiceMsg)
 
@@ -69,12 +72,13 @@ func (gh *GameHandler) setUpCategory() error {
 		}
 
 		if 0 < idx && idx <= len(categories) {
-			categoryID = categories[idx-1].ID
+			category = categories[idx-1]
 			break
 		} else {
 			fmt.Println(InvalidInputMsg)
 		}
 	}
+	gh.config.SetCategory(category)
 
-	return gh.gameUseCase.SetUpCategory(categoryID)
+	return nil
 }

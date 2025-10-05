@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"os"
 
-	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/application/dto"
+	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/domain/entities"
 )
 
-func (gh *GameHandler) displayGameState(info dto.GameInfo) {
+func (gh *GameHandler) displayGameState() {
+	info := entities.NewGameInfo(gh.game, gh.config)
+
 	gh.clearTerminal()
 
 	fmt.Println(hangStates[info.RemainingAttempts])
@@ -24,17 +26,17 @@ func (gh *GameHandler) displayGameState(info dto.GameInfo) {
 	fmt.Println()
 }
 
-func (gh *GameHandler) displayGameResult(grs dto.GameResult) {
-	if grs.IsWon {
-		fmt.Printf("🎉 Congratulations! You won! The word was: %s\n", grs.Word)
+func (gh *GameHandler) displayGameResult() {
+	if gh.game.IsWon() {
+		fmt.Printf("🎉 Congratulations! You won! The word was: %s\n", gh.game.Word().Value())
 	} else {
-		fmt.Printf("💀 Game over! The word was: %s\n", grs.Word)
+		fmt.Printf("💀 Game over! The word was: %s\n", gh.game.Word().Value())
 	}
 }
 
 func (gh *GameHandler) printHint() {
 	if gh.showHint {
-		fmt.Println("Hint:", gh.gameUseCase.Hint())
+		fmt.Println("Hint:", gh.game.Word().Hint())
 	}
 }
 
