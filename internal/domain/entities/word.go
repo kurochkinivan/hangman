@@ -7,8 +7,8 @@ type Word struct {
 	hint  string
 }
 
-func NewWord(value string, hint string) *Word {
-	return &Word{
+func NewWord(value string, hint string) Word {
+	return Word{
 		value: strings.ToLower(value),
 		hint:  hint,
 	}

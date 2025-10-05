@@ -17,8 +17,8 @@ const (
 )
 
 var (
-	allLevels        = []Level{LevelEasy, LevelMedium, LevelHard, LevelRandom, LevelUnknown} // all existing levels
-	playableLevels   = []Level{LevelEasy, LevelMedium, LevelHard} 
+	allLevels      = []Level{LevelEasy, LevelMedium, LevelHard, LevelRandom, LevelUnknown} // all existing levels
+	playableLevels = []Level{LevelEasy, LevelMedium, LevelHard}
 )
 
 func (l Level) IsValid() bool {
@@ -56,6 +56,8 @@ func (l Level) Attempts() int {
 		return 6
 	case LevelHard:
 		return 5
+	case LevelRandom:
+		return rand.IntN(3)+5	
 	case LevelUnknown:
 		return math.MaxInt32
 	default:
