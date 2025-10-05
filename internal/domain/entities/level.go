@@ -3,7 +3,6 @@ package entities
 import (
 	"math"
 	"math/rand/v2"
-	"slices"
 )
 
 type Level int
@@ -16,14 +15,7 @@ const (
 	LevelUnknown
 )
 
-var (
-	allLevels      = []Level{LevelEasy, LevelMedium, LevelHard, LevelRandom, LevelUnknown} // all existing levels
-	playableLevels = []Level{LevelEasy, LevelMedium, LevelHard}
-)
-
-func (l Level) IsValid() bool {
-	return slices.Contains(allLevels, l)
-}
+var playableLevels = []Level{LevelEasy, LevelMedium, LevelHard}
 
 // AllLevels returns the list of levels that the user can choose.
 func AllLevels() []Level {
@@ -57,7 +49,7 @@ func (l Level) Attempts() int {
 	case LevelHard:
 		return 5
 	case LevelRandom:
-		return rand.IntN(3)+5	
+		return rand.IntN(3) + 5
 	case LevelUnknown:
 		return math.MaxInt32
 	default:

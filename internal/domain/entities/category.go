@@ -2,7 +2,6 @@ package entities
 
 import (
 	"math/rand/v2"
-	"slices"
 )
 
 type Category int
@@ -15,14 +14,7 @@ const (
 	CategoryUnknown
 )
 
-var (
-	allCategories      = []Category{CategoryAnimals, CategoryFruitsVegetables, CategoryCountries, CategoryRandom, CategoryUnknown} // all existing categories
-	playableCategories = []Category{CategoryAnimals, CategoryFruitsVegetables, CategoryCountries}
-)
-
-func (c Category) IsValid() bool {
-	return slices.Contains(allCategories, c)
-}
+var playableCategories = []Category{CategoryAnimals, CategoryFruitsVegetables, CategoryCountries}
 
 // AllCategories() returns a list of categories the user can choose.
 func AllCategories() []Category {
