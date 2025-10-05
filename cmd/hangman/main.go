@@ -10,12 +10,8 @@ import (
 	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/pkg/random"
 )
 
-const (
-	pathToWordsYAML = "../../words/words.yaml"
-)
-
 func main() {
-	wl, err := wordslist.LoadWordsListFromYAML(pathToWordsYAML)
+	wl, err := wordslist.LoadWordsListFromYAML()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "failed to load repository from yaml: %v\n", err.Error())
 		os.Exit(1)

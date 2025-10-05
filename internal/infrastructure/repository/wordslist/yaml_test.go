@@ -2,32 +2,12 @@ package wordslist
 
 import (
 	"io"
-	"os"
-	"path/filepath"
 	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
-
-func LoadWordsListFromYAML_HappyPath(t *testing.T) {
-	tmpDir := t.TempDir()
-	pathToYAML := filepath.Join(tmpDir, "words.yaml")
-
-	err := os.WriteFile(pathToYAML, []byte("animals:"), 0644)
-	require.NoError(t, err)
-
-	_, err = LoadWordsListFromYAML(pathToYAML)
-	assert.NoError(t, err)
-}
-
-func LoadWordsListFromYAML_FileDoesNotExist(t *testing.T) {
-	pathToYAML := filepath.Join("nowhere", "words.yaml")
-
-	_, err := LoadWordsListFromYAML(pathToYAML)
-	assert.ErrorIs(t, err, &os.PathError{})
-}
 
 func TestLoadWordsList_HappyPath(t *testing.T) {
 	yamlContents := `

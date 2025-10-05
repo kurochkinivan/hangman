@@ -1,13 +1,17 @@
 package wordslist
 
 import (
+	"bytes"
+	_ "embed"
 	"errors"
 	"fmt"
 	"io"
-	"os"
 
 	"gopkg.in/yaml.v3"
 )
+
+//go:embed words/words.yaml
+var wordsYAML []byte
 
 type WordsList struct {
 	Animals          CategoryData `yaml:"animals"`
@@ -26,23 +30,9 @@ type Word struct {
 	Hint  string `yaml:"hint"`
 }
 
-func LoadWordsListFromYAML(pathToYAML string) (wl WordsList, err error) {
-	if _, err := os.Stat(pathToYAML); err != nil {
-		return WordsList{}, fmt.Errorf("failed to get file info: %w", err)
-	}
-
-	f, err := os.Open(pathToYAML)
-	if err != nil {
-		return WordsList{}, fmt.Errorf("failed to open file: %w", err)
-	}
-	defer func() {
-		closeErr := f.Close()
-		if closeErr != nil {
-			err = errors.Join(err, closeErr)
-		}
-	}()
-
-	return loadWordsList(f)
+func LoadWordsListFromYAML() (WordsList, error) {
+	r := bytes.NewReader(wordsYAML)
+	return loadWordsList(r)
 }
 
 // loadWordsList reads and decodes a YAML-formatted words list from the provided io.Reader.
