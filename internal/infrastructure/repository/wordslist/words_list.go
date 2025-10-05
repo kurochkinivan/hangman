@@ -1,105 +1,71 @@
 package wordslist
 
 import (
-	"math/rand/v2"
+	"fmt"
 
-	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/application/dto"
+	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/domain/entities"
 	ent "gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/domain/entities"
-	apperr "gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/lib/appErr"
+	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/lib/errs"
 )
 
-type WordEntry struct {
-	Value string
-	Hint  string
-}
-
 type Repository struct {
-	wordsMap map[ent.Category]map[ent.Level][]WordEntry
+	wl      WordsList
+	randSel RandomSelector[Word]
 }
 
-func NewRepository() *Repository {
+type RandomSelector[T any] interface {
+	Choose(items []T) T
+}
+
+func NewRepository(wl WordsList, randSel RandomSelector[Word]) *Repository {
 	return &Repository{
-		wordsMap: map[ent.Category]map[ent.Level][]WordEntry{
-			ent.CategoryAnimals: {
-				ent.LevelEasy: {
-					{"cat", "domestic pet"},
-					{"dog", "man's best friend"},
-					{"cow", "gives milk"},
-					{"pig", "lives on a farm"},
-				},
-				ent.LevelMedium: {
-					{"lion", "king of the jungle"},
-					{"tiger", "striped predator"},
-					{"zebra", "striped horse"},
-					{"giraffe", "long neck"},
-				},
-				ent.LevelHard: {
-					{"elephant", "largest land animal"},
-					{"rhinoceros", "has a horn"},
-					{"hippopotamus", "lives near rivers"},
-					{"kangaroo", "jumps and has a pouch"},
-				},
-			},
-			ent.CategoryFruitsVegetables: {
-				ent.LevelEasy: {
-					{"apple", "keeps the doctor away"},
-					{"pear", "bell-shaped fruit"},
-					{"plum", "small purple fruit"},
-					{"carrot", "orange vegetable"},
-				},
-				ent.LevelMedium: {
-					{"banana", "yellow curved fruit"},
-					{"orange", "citrus fruit"},
-					{"pepper", "can be sweet or spicy"},
-					{"potato", "grows underground"},
-				},
-				ent.LevelHard: {
-					{"pomegranate", "many red seeds inside"},
-					{"asparagus", "green spring vegetable"},
-					{"artichoke", "edible flower bud"},
-					{"cucumber", "green salad vegetable"},
-				},
-			},
-			ent.CategoryCountries: {
-				ent.LevelEasy: {
-					{"egypt", "pyramids"},
-					{"india", "Taj Mahal"},
-					{"italy", "pizza & pasta"},
-					{"china", "Great Wall"},
-				},
-				ent.LevelMedium: {
-					{"canada", "maple leaf"},
-					{"germany", "beer & sausages"},
-					{"brazil", "Rio carnival"},
-					{"japan", "samurai & sushi"},
-				},
-				ent.LevelHard: {
-					{"australia", "kangaroos and koalas"},
-					{"kazakhstan", "largest landlocked country"},
-					{"singapore", "city-state in Asia"},
-					{"switzerland", "Alps and chocolate"},
-				},
-			},
-		},
+		wl:      wl,
+		randSel: randSel,
 	}
 }
 
-func (r *Repository) RandomWord(config *ent.GameConfig) (*dto.Word, error) {
-	categoryWords, ok := r.wordsMap[config.Category()]
-	if !ok {
-		return nil, apperr.NewAppErr("Repository.RandomWord", "category not found")
+func (r *Repository) RandomWord(level ent.Level, category ent.Category) (entities.Word, error) {
+	categoryData, err := r.wl.categoryDataFromCategory(category)
+	if err != nil {
+		return entities.Word{}, fmt.Errorf("failed to get category data from category: %w", err)
 	}
 
-	levelWords, ok := categoryWords[config.Level()]
-	if !ok {
-		return nil, apperr.NewAppErr("Repository.RandomWord", "level not found")
+	levelWords, err := categoryData.wordEntriesFromLevel(level)
+	if err != nil {
+		return entities.Word{}, fmt.Errorf("failed to get words from level: %w", err)
 	}
 
 	if len(levelWords) == 0 {
-		return nil, apperr.NewAppErr("Repository.RandomWord", "no words are available for this category and level")
+		return entities.Word{}, errs.NewAppErr("Repository.RandomWord", "no words are available for this category and level")
 	}
 
-	wordEntry := levelWords[rand.IntN(len(levelWords))]
+	wordEntry := r.randSel.Choose(levelWords)
 
-	return dto.NewWord(wordEntry.Value, wordEntry.Hint), nil
+	return entities.NewWord(wordEntry.Value, wordEntry.Hint), nil
+}
+
+func (wl WordsList) categoryDataFromCategory(category ent.Category) (CategoryData, error) {
+	switch category {
+	case ent.CategoryAnimals:
+		return wl.Animals, nil
+	case ent.CategoryFruitsVegetables:
+		return wl.FruitsVegetables, nil
+	case ent.CategoryCountries:
+		return wl.Countries, nil
+	default:
+		return CategoryData{}, fmt.Errorf("unknown category %s", category)
+	}
+}
+
+func (cat CategoryData) wordEntriesFromLevel(level ent.Level) ([]Word, error) {
+	switch level {
+	case ent.LevelEasy:
+		return cat.Easy, nil
+	case ent.LevelMedium:
+		return cat.Medium, nil
+	case ent.LevelHard:
+		return cat.Hard, nil
+	default:
+		return nil, fmt.Errorf("unknown level %s", level)
+	}
 }

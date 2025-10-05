@@ -3,69 +3,70 @@ package wordslist
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	ent "gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/domain/entities"
+	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/infrastructure/repository/wordslist/mocks"
 )
 
-func TestRandomWord(t *testing.T) {
-	tests := []struct {
-		name     string
-		level    ent.Level
-		category ent.Category
-		wantErr  bool
-		wantWord string
-	}{
-		{
-			name:     "valid easy animals",
-			level:    ent.LevelEasy,
-			category: ent.CategoryAnimals,
-			wantErr:  false,
-			wantWord: "cat",
-		},
-		{
-			name:     "invalid category",
-			level:    ent.LevelEasy,
-			category: ent.CategoryUnknown,
-			wantErr:  true,
-		},
-		{
-			name:     "invalid level",
-			level:    ent.LevelUnknown,
-			category: ent.CategoryAnimals,
-			wantErr:  true,
-		},
-		{
-			name:     "empty words list",
-			level:    ent.LevelEasy,
-			category: ent.CategoryFruitsVegetables,
-			wantErr:  true,
+func TestRandomWord_HappyPath(t *testing.T) {
+	expectedWord := Word{Value: "cat", Hint: "meow"}
+	wl := WordsList{
+		Animals: CategoryData{
+			Easy: []Word{expectedWord, {Value: "dog", Hint: "woof"}},
 		},
 	}
 
-	repo := NewRepository()
+	mockRandSel := mocks.NewMockRandomSelector[Word](t)
+	mockRandSel.EXPECT().Choose(wl.Animals.Easy).Return(expectedWord)
 
-	animalsEasyBefore := repo.wordsMap[ent.CategoryAnimals][ent.LevelEasy]
-	repo.wordsMap[ent.CategoryAnimals][ent.LevelEasy] = []WordEntry{{"cat", ""}}
+	repo := NewRepository(wl, mockRandSel)
 
-	fruitsEasyBefore := repo.wordsMap[ent.CategoryFruitsVegetables][ent.LevelEasy]
-	repo.wordsMap[ent.CategoryFruitsVegetables][ent.LevelEasy] = []WordEntry{}
+	wordDTO, err := repo.RandomWord(ent.LevelEasy, ent.CategoryAnimals)
+	require.NoError(t, err)
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			cfg, err := ent.NewGameConfig(tt.level, tt.category)
-			require.NoError(t, err)
+	assert.Equal(t, expectedWord.Value, wordDTO.Value())
+	assert.Equal(t, expectedWord.Hint, wordDTO.Hint())
+}
 
-			word, err := repo.RandomWord(cfg)
-			if tt.wantErr {
-				require.Error(t, err, "should have error")
-				return
-			}
-			require.NoError(t, err)
+func TestRandomWord_EmptyCategory(t *testing.T) {
+	wl := WordsList{}
 
-			require.Equal(t, tt.wantWord, word.Value, "should be equal")
-		})
+	mockRandSel := mocks.NewMockRandomSelector[Word](t)
+	repo := NewRepository(wl, mockRandSel)
+
+	w, err := repo.RandomWord(ent.LevelEasy, ent.CategoryAnimals)
+
+	assert.Error(t, err)
+	assert.Empty(t, w)
+}
+
+func TestRandomWord_EmptyLevel(t *testing.T) {
+	wl := WordsList{
+		Animals: CategoryData{},
 	}
 
-	repo.wordsMap[ent.CategoryAnimals][ent.LevelEasy] = animalsEasyBefore
-	repo.wordsMap[ent.CategoryFruitsVegetables][ent.LevelEasy] = fruitsEasyBefore
+	mockRandSel := mocks.NewMockRandomSelector[Word](t)
+	repo := NewRepository(wl, mockRandSel)
+
+	w, err := repo.RandomWord(ent.LevelEasy, ent.CategoryAnimals)
+
+	assert.Error(t, err)
+	assert.Empty(t, w)
+}
+
+func TestRandomWord_NoWords(t *testing.T) {
+	wl := WordsList{
+		Animals: CategoryData{
+			Easy: []Word{},
+		},
+	}
+
+	mockRandSel := mocks.NewMockRandomSelector[Word](t)
+	repo := NewRepository(wl, mockRandSel)
+
+	w, err := repo.RandomWord(ent.LevelEasy, ent.CategoryAnimals)
+
+	assert.Error(t, err)
+	assert.Empty(t, w)
 }
