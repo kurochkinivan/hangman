@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/infrastructure/terminal/mocks"
 )
@@ -83,4 +84,50 @@ func (s *PlayTestSuite) TestPlay_LetterUsed() {
 	s.Require().NoError(err)
 
 	s.Contains(s.outputBuf.String(), "Letter is already used.")
+}
+
+func TestIsValidSingleLetter(t *testing.T) {
+	tests := []struct {
+		name string
+		s    string
+		want bool
+	}{
+		{
+			name: "valid letter - en",
+			s:    "v",
+			want: true,
+		},
+		{
+			name: "valid letter - ru",
+			s:    "й",
+			want: true,
+		},
+		{
+			name: "several letters",
+			s:    "ab",
+			want: false,
+		},
+		{
+			name: "empty",
+			s:    "",
+			want: false,
+		},
+		{
+			name: "special symbol",
+			s:    "/",
+			want: false,
+		},
+		{
+			name: "number",
+			s:    "1",
+			want: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := isValidSingleLetter(tt.s)
+			assert.Equal(t, tt.want, got)
+		})
+	}
 }

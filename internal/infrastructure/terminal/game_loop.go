@@ -44,7 +44,7 @@ func (gh *GameHandler) startGame() error {
 
 	for gh.game.InProgress() {
 		gh.displayGameState()
-		
+
 		err := gh.play()
 		if err != nil {
 			gh.printError(err, "failed to play round")
@@ -70,9 +70,9 @@ func (gh *GameHandler) play() error {
 		return nil
 	}
 
-	if valid, err := isValidSingleLetter(input); !valid {
+	if valid := isValidSingleLetter(input); !valid {
 		fmt.Fprintln(gh.out, InvalidInputMsg)
-		return err
+		return nil
 	}
 
 	r, _ := utf8.DecodeRuneInString(input)
@@ -92,22 +92,19 @@ func (gh *GameHandler) play() error {
 	return nil
 }
 
-func isValidSingleLetter(s string) (bool, error) {
+func isValidSingleLetter(s string) bool {
 	if utf8.RuneCountInString(s) != 1 {
-		return false, nil
+		return false
 	}
 
-	r, size := utf8.DecodeRuneInString(s)
+	r, _ := utf8.DecodeRuneInString(s)
 	if r == utf8.RuneError {
-		if size == 1 {
-			return false, fmt.Errorf("invalid encoding, failed to decode %q", s)
-		}
-		return false, nil
+		return false
 	}
 
 	if !unicode.IsLetter(r) {
-		return false, nil
+		return false
 	}
 
-	return true, nil
+	return true
 }
