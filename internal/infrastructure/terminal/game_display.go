@@ -3,47 +3,43 @@ package terminal
 import (
 	"fmt"
 	"os"
-
-	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/domain/entities"
 )
 
 func (gh *GameHandler) displayGameState() {
-	info := entities.NewGameInfo(gh.game, gh.config)
-
 	gh.clearTerminal()
 
-	fmt.Println(hangStates[info.RemainingAttempts])
-	fmt.Printf("Level: %s, Category: %s\n", info.Level, info.Category)
-	fmt.Printf("Word: %s\n", info.WordMask)
-	fmt.Printf("Remaining attempts: %d\n", info.RemainingAttempts)
+	fmt.Fprintln(gh.out, hangStates[gh.game.RemainingAttempts()])
+	fmt.Fprintf(gh.out, "Level: %s, Category: %s\n", gh.config.Level(), gh.config.Category())
+	fmt.Fprintf(gh.out, "Word: %s\n", gh.game.WordMask())
+	fmt.Fprintf(gh.out, "Remaining attempts: %d\n", gh.game.RemainingAttempts())
 
 	gh.printHint()
 
-	fmt.Print("Guessed letters: ")
-	for _, letter := range info.GuessedLetters {
-		fmt.Printf("%c ", letter)
+	fmt.Fprint(gh.out, "Guessed letters: ")
+	for _, letter := range gh.game.GuessedLetters() {
+		fmt.Fprintf(gh.out, "%c ", letter)
 	}
-	fmt.Println()
+	fmt.Fprintln(gh.out)
 }
 
 func (gh *GameHandler) displayGameResult() {
 	if gh.game.IsWon() {
-		fmt.Printf("🎉 Congratulations! You won! The word was: %s\n", gh.game.Word().Value())
+		fmt.Fprintf(gh.out, "🎉 Congratulations! You won! The word was: %s\n", gh.game.Word().Value())
 	} else {
-		fmt.Printf("💀 Game over! The word was: %s\n", gh.game.Word().Value())
+		fmt.Fprintf(gh.out, "💀 Game over! The word was: %s\n", gh.game.Word().Value())
 	}
 }
 
 func (gh *GameHandler) printHint() {
 	if gh.showHint {
-		fmt.Println("Hint:", gh.game.Word().Hint())
+		fmt.Fprintln(gh.out, "Hint:", gh.game.Word().Hint())
 	}
 }
 
 func (gh *GameHandler) printMenu() {
-	fmt.Println("[1] Start Game")
-	fmt.Println("[2] Settings")
-	fmt.Println("[3] Exit")
+	fmt.Fprintln(gh.out, "[1] Start Game")
+	fmt.Fprintln(gh.out, "[2] Settings")
+	fmt.Fprintln(gh.out, "[3] Exit")
 }
 
 func (gh *GameHandler) printError(err error, context string) {

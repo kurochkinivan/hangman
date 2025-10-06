@@ -2,7 +2,6 @@ package terminal
 
 import (
 	"fmt"
-	"os"
 	"unicode"
 	"unicode/utf8"
 
@@ -22,7 +21,7 @@ func (gh *GameHandler) Start() {
 				gh.printError(err, "start game")
 			}
 
-			fmt.Println("Press Enter to return to main menu...")
+			fmt.Fprintln(gh.out, "Press Enter to return to main menu...")
 			gh.reader.ReadString('\n')
 
 		case "2":
@@ -34,6 +33,7 @@ func (gh *GameHandler) Start() {
 		}
 	}
 }
+
 func (gh *GameHandler) startGame() error {
 	word, err := gh.config.GenerateWord()
 	if err != nil {
@@ -43,9 +43,11 @@ func (gh *GameHandler) startGame() error {
 	gh.game = entities.NewGame(word, gh.config.Level().Attempts())
 
 	for gh.game.InProgress() {
+		gh.displayGameState()
+		
 		err := gh.play()
 		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
+			gh.printError(err, "failed to play round")
 		}
 	}
 
@@ -56,8 +58,7 @@ func (gh *GameHandler) startGame() error {
 }
 
 func (gh *GameHandler) play() error {
-	gh.displayGameState()
-	fmt.Print("Enter a letter (or type 'hint' for a clue): ")
+	fmt.Fprint(gh.out, "Enter a letter (or type 'hint' for a clue): ")
 
 	input, err := gh.readString()
 	if err != nil {
@@ -70,22 +71,22 @@ func (gh *GameHandler) play() error {
 	}
 
 	if valid, err := isValidSingleLetter(input); !valid {
-		fmt.Println(InvalidInputMsg)
+		fmt.Fprintln(gh.out, InvalidInputMsg)
 		return err
 	}
 
 	r, _ := utf8.DecodeRuneInString(input)
 
 	if gh.game.IsLetterGuessed(r) {
-		fmt.Println("Letter is already used.")
+		fmt.Fprintln(gh.out, "Letter is already used.")
 		return nil
 	}
 
 	correct := gh.game.GuessLetter(r)
 	if correct {
-		fmt.Println("Correct!")
+		fmt.Fprintln(gh.out, "Correct!")
 	} else {
-		fmt.Println("Wrong letter.")
+		fmt.Fprintln(gh.out, "Wrong letter.")
 	}
 
 	return nil

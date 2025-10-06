@@ -22,16 +22,16 @@ func (gh *GameHandler) setUpGameConfig() error {
 func (gh *GameHandler) setUpLevel() error {
 	gh.refreshScreen()
 
-	fmt.Println("Select difficulty level.")
+	fmt.Fprintln(gh.out, "Select difficulty level.")
 
 	levels := entities.AllLevels()
 	for i, l := range levels {
-		fmt.Printf("[%d] %s\n", i+1, l.String())
+		fmt.Fprintf(gh.out, "[%d] %s\n", i+1, l.String())
 	}
 
 	var level entities.Level
 	for {
-		fmt.Println(EnterYourChoiceMsg)
+		fmt.Fprintln(gh.out, EnterYourChoiceMsg)
 
 		idx, err := gh.readInt()
 		if err != nil {
@@ -43,7 +43,7 @@ func (gh *GameHandler) setUpLevel() error {
 			level = levels[idx-1]
 			break
 		} else {
-			fmt.Println(InvalidInputMsg)
+			fmt.Fprintln(gh.out, InvalidInputMsg)
 		}
 	}
 	gh.config.SetLevel(level)
@@ -54,16 +54,16 @@ func (gh *GameHandler) setUpLevel() error {
 func (gh *GameHandler) setUpCategory() error {
 	gh.refreshScreen()
 
-	fmt.Println("Select words category.")
+	fmt.Fprintln(gh.out, "Select words category.")
 
 	categories := entities.AllCategories()
 	for i, cat := range categories {
-		fmt.Printf("[%d] %s\n", i+1, cat.String())
+		fmt.Fprintf(gh.out, "[%d] %s\n", i+1, cat.String())
 	}
 
 	var category entities.Category
 	for {
-		fmt.Println(EnterYourChoiceMsg)
+		fmt.Fprintln(gh.out, EnterYourChoiceMsg)
 
 		idx, err := gh.readInt()
 		if err != nil {
@@ -75,7 +75,7 @@ func (gh *GameHandler) setUpCategory() error {
 			category = categories[idx-1]
 			break
 		} else {
-			fmt.Println(InvalidInputMsg)
+			fmt.Fprintln(gh.out, InvalidInputMsg)
 		}
 	}
 	gh.config.SetCategory(category)

@@ -15,7 +15,7 @@ func (g *GameHandler) refreshScreen() {
 }
 
 func (g *GameHandler) printBanner() {
-	fmt.Println(asciiHangman)
+	fmt.Fprintln(g.out, asciiHangman)
 }
 
 func (g *GameHandler) clearTerminal() {
