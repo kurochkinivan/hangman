@@ -21,7 +21,7 @@ func main() {
 
 	switch len(os.Args[1:]) {
 	case 0:
-		gh := terminal.NewGameHandler(wordsRepo, os.Stdin)
+		gh := terminal.NewGameHandler(wordsRepo, os.Stdin, os.Stdout)
 		gh.Start()
 	case 2:
 		word, guessed := os.Args[1], os.Args[2]
