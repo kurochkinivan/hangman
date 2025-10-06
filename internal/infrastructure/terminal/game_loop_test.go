@@ -20,7 +20,7 @@ type PlayTestSuite struct {
 	outputBuf  *bytes.Buffer
 }
 
-func TestExampleTestSuite(t *testing.T) {
+func TestPlayTestSuite(t *testing.T) {
 	suite.Run(t, new(PlayTestSuite))
 }
 
