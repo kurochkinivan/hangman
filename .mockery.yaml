@@ -6,4 +6,8 @@ packages:
   gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/infrastructure/repository/wordslist:
     interfaces:
       RandomSelector:
+  gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/infrastructure/terminal:
+    interfaces:
+      Game:
+      Config:
 
