@@ -8,6 +8,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
+	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/domain/entities"
 	"gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/infrastructure/terminal/mocks"
 )
 
@@ -130,4 +131,47 @@ func TestIsValidSingleLetter(t *testing.T) {
 			assert.Equal(t, tt.want, got)
 		})
 	}
+}
+
+func (s *PlayTestSuite) TestPlay_ScreenRefreshesAfterGuess() {
+	var letter rune = rune('a')
+	str := fmt.Sprintf("%c\n", letter)
+
+	_, err := s.inputBuf.WriteString(str)
+	s.Require().NoError(err)
+
+	attempts := 5
+
+	// Simulate initial game state
+	s.mockGame.EXPECT().RemainingAttempts().Return(attempts).Once()
+	s.mockGame.EXPECT().WordMask().Return("h***o").Once()
+	s.mockGame.EXPECT().GuessedLetters().Return([]rune{}).Once()
+	s.mockConfig.EXPECT().Level().Return(entities.LevelEasy).Once()
+	s.mockConfig.EXPECT().Category().Return(entities.CategoryAnimals).Once()
+
+	// Display initial state
+	s.handler.displayGameState()
+	initialOutput := s.outputBuf.String()
+	s.Contains(initialOutput, hangStates[len(hangStates)-5], "Initial hangman state should be in output")
+
+	// Now perform the guess
+	s.mockGame.EXPECT().IsLetterGuessed(letter).Return(false)
+	s.mockGame.EXPECT().GuessLetter(letter).Return(false) 
+	// Wrong guess, attempts decrease
+	attempts--
+
+	err = s.handler.play()
+	s.Require().NoError(err)
+
+	// Display new state after guess
+	s.mockGame.EXPECT().RemainingAttempts().Return(attempts).Once()
+	s.mockGame.EXPECT().WordMask().Return("h***o").Once()
+	s.mockGame.EXPECT().GuessedLetters().Return([]rune{'a'}).Once()
+	s.mockConfig.EXPECT().Level().Return(entities.LevelEasy).Once()
+	s.mockConfig.EXPECT().Category().Return(entities.CategoryAnimals).Once()
+	
+	s.handler.displayGameState()
+	
+	finalOutput := s.outputBuf.String()
+	s.Contains(finalOutput, hangStates[len(hangStates)-attempts], fmt.Sprintf("Should contain old hangman state (%d attempts)", attempts))
 }

@@ -7,11 +7,12 @@ import (
 
 func (gh *GameHandler) displayGameState() {
 	gh.clearTerminal()
+	remaining := gh.game.RemainingAttempts()
 
-	fmt.Fprintln(gh.out, hangStates[gh.game.RemainingAttempts()])
+	fmt.Fprintln(gh.out, hangStates[len(hangStates)-remaining])
 	fmt.Fprintf(gh.out, "Level: %s, Category: %s\n", gh.config.Level(), gh.config.Category())
 	fmt.Fprintf(gh.out, "Word: %s\n", gh.game.WordMask())
-	fmt.Fprintf(gh.out, "Remaining attempts: %d\n", gh.game.RemainingAttempts())
+	fmt.Fprintf(gh.out, "Remaining attempts: %d\n", remaining)
 
 	gh.printHint()
 
