@@ -6,7 +6,6 @@ type GameConfig struct {
 	wordsRepo WordsRepository
 }
 
-// TODO: Сделать с тест моками
 type WordsRepository interface {
 	RandomWord(level Level, category Category) (Word, error)
 }
