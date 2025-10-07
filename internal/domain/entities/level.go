@@ -1,7 +1,6 @@
 package entities
 
 import (
-	"math"
 	"math/rand/v2"
 )
 
@@ -12,14 +11,16 @@ const (
 	LevelMedium
 	LevelHard
 	LevelRandom
-	LevelUnknown
 )
 
-var playableLevels = [...]Level{LevelEasy, LevelMedium, LevelHard}
+var (
+	playableLevels = [...]Level{LevelEasy, LevelMedium, LevelHard}
+	allLevels = [...]Level{LevelEasy, LevelMedium, LevelHard, LevelRandom}
+)
 
 // AllLevels returns the list of levels that the user can choose.
 func AllLevels() []Level {
-	return []Level{LevelEasy, LevelMedium, LevelHard, LevelRandom}
+	return allLevels[:]
 }
 
 func RandomLevel() Level {
@@ -50,8 +51,6 @@ func (l Level) Attempts() int {
 		return 5
 	case LevelRandom:
 		return rand.IntN(3) + 5
-	case LevelUnknown:
-		return math.MaxInt32
 	default:
 		return 0
 	}

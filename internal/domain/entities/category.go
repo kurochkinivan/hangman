@@ -11,14 +11,16 @@ const (
 	CategoryFruitsVegetables
 	CategoryCountries
 	CategoryRandom
-	CategoryUnknown
 )
 
-var playableCategories = [...]Category{CategoryAnimals, CategoryFruitsVegetables, CategoryCountries}
+var (
+	playableCategories = [...]Category{CategoryAnimals, CategoryFruitsVegetables, CategoryCountries}
+	allCategories      = [...]Category{CategoryAnimals, CategoryFruitsVegetables, CategoryCountries, CategoryRandom}
+)
 
 // AllCategories() returns a list of categories the user can choose.
 func AllCategories() []Category {
-	return []Category{CategoryAnimals, CategoryFruitsVegetables, CategoryCountries, CategoryRandom}
+	return allCategories[:]
 }
 
 func RandomCategory() Category {
