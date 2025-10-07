@@ -38,7 +38,7 @@ type Game interface {
 }
 
 type Config interface {
-	GenerateWord() (entities.Word, error)
+	SelectWord() (entities.Word, error)
 	SetLevel(level entities.Level)
 	SetCategory(category entities.Category)
 

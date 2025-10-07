@@ -19,7 +19,7 @@ func NewGameConfig(wordsRepo WordsRepository) *GameConfig {
 	}
 }
 
-func (gc *GameConfig) GenerateWord() (Word, error) {
+func (gc *GameConfig) SelectWord() (Word, error) {
 	level := gc.Level()
 	if level == LevelRandom {
 		level = RandomLevel()

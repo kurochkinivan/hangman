@@ -35,7 +35,7 @@ func (gh *GameHandler) Start() {
 }
 
 func (gh *GameHandler) startGame() error {
-	word, err := gh.config.GenerateWord()
+	word, err := gh.config.SelectWord()
 	if err != nil {
 		return fmt.Errorf("failed to generate word: %w", err)
 	}

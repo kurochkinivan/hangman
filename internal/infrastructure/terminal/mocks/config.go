@@ -80,59 +80,6 @@ func (_c *MockConfig_Category_Call) RunAndReturn(run func() entities.Category) *
 	return _c
 }
 
-// GenerateWord provides a mock function for the type MockConfig
-func (_mock *MockConfig) GenerateWord() (entities.Word, error) {
-	ret := _mock.Called()
-
-	if len(ret) == 0 {
-		panic("no return value specified for GenerateWord")
-	}
-
-	var r0 entities.Word
-	var r1 error
-	if returnFunc, ok := ret.Get(0).(func() (entities.Word, error)); ok {
-		return returnFunc()
-	}
-	if returnFunc, ok := ret.Get(0).(func() entities.Word); ok {
-		r0 = returnFunc()
-	} else {
-		r0 = ret.Get(0).(entities.Word)
-	}
-	if returnFunc, ok := ret.Get(1).(func() error); ok {
-		r1 = returnFunc()
-	} else {
-		r1 = ret.Error(1)
-	}
-	return r0, r1
-}
-
-// MockConfig_GenerateWord_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GenerateWord'
-type MockConfig_GenerateWord_Call struct {
-	*mock.Call
-}
-
-// GenerateWord is a helper method to define mock.On call
-func (_e *MockConfig_Expecter) GenerateWord() *MockConfig_GenerateWord_Call {
-	return &MockConfig_GenerateWord_Call{Call: _e.mock.On("GenerateWord")}
-}
-
-func (_c *MockConfig_GenerateWord_Call) Run(run func()) *MockConfig_GenerateWord_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		run()
-	})
-	return _c
-}
-
-func (_c *MockConfig_GenerateWord_Call) Return(word entities.Word, err error) *MockConfig_GenerateWord_Call {
-	_c.Call.Return(word, err)
-	return _c
-}
-
-func (_c *MockConfig_GenerateWord_Call) RunAndReturn(run func() (entities.Word, error)) *MockConfig_GenerateWord_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
 // Level provides a mock function for the type MockConfig
 func (_mock *MockConfig) Level() entities.Level {
 	ret := _mock.Called()
@@ -173,6 +120,59 @@ func (_c *MockConfig_Level_Call) Return(level entities.Level) *MockConfig_Level_
 }
 
 func (_c *MockConfig_Level_Call) RunAndReturn(run func() entities.Level) *MockConfig_Level_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// SelectWord provides a mock function for the type MockConfig
+func (_mock *MockConfig) SelectWord() (entities.Word, error) {
+	ret := _mock.Called()
+
+	if len(ret) == 0 {
+		panic("no return value specified for SelectWord")
+	}
+
+	var r0 entities.Word
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func() (entities.Word, error)); ok {
+		return returnFunc()
+	}
+	if returnFunc, ok := ret.Get(0).(func() entities.Word); ok {
+		r0 = returnFunc()
+	} else {
+		r0 = ret.Get(0).(entities.Word)
+	}
+	if returnFunc, ok := ret.Get(1).(func() error); ok {
+		r1 = returnFunc()
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockConfig_SelectWord_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'SelectWord'
+type MockConfig_SelectWord_Call struct {
+	*mock.Call
+}
+
+// SelectWord is a helper method to define mock.On call
+func (_e *MockConfig_Expecter) SelectWord() *MockConfig_SelectWord_Call {
+	return &MockConfig_SelectWord_Call{Call: _e.mock.On("SelectWord")}
+}
+
+func (_c *MockConfig_SelectWord_Call) Run(run func()) *MockConfig_SelectWord_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run()
+	})
+	return _c
+}
+
+func (_c *MockConfig_SelectWord_Call) Return(word entities.Word, err error) *MockConfig_SelectWord_Call {
+	_c.Call.Return(word, err)
+	return _c
+}
+
+func (_c *MockConfig_SelectWord_Call) RunAndReturn(run func() (entities.Word, error)) *MockConfig_SelectWord_Call {
 	_c.Call.Return(run)
 	return _c
 }
