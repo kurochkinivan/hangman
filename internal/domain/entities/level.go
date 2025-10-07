@@ -15,7 +15,7 @@ const (
 	LevelUnknown
 )
 
-var playableLevels = []Level{LevelEasy, LevelMedium, LevelHard}
+var playableLevels = [...]Level{LevelEasy, LevelMedium, LevelHard}
 
 // AllLevels returns the list of levels that the user can choose.
 func AllLevels() []Level {

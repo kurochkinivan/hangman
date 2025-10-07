@@ -14,7 +14,7 @@ const (
 	CategoryUnknown
 )
 
-var playableCategories = []Category{CategoryAnimals, CategoryFruitsVegetables, CategoryCountries}
+var playableCategories = [...]Category{CategoryAnimals, CategoryFruitsVegetables, CategoryCountries}
 
 // AllCategories() returns a list of categories the user can choose.
 func AllCategories() []Category {
