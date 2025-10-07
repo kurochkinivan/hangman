@@ -10,4 +10,6 @@ packages:
     interfaces:
       Game:
       Config:
-
+  "gitlab.education.tbank.ru/backend-academy-go-2025/homeworks/hw1-hangman/internal/domain/entities":
+    interfaces:
+      WordsRepository:
