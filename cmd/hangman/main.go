@@ -11,16 +11,16 @@ import (
 )
 
 func main() {
-	wl, err := wordslist.LoadWordsListFromYAML()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "failed to load repository from yaml: %v\n", err.Error())
-		os.Exit(1)
-	}
-	randSelector := random.New[wordslist.Word]()
-	wordsRepo := wordslist.NewRepository(wl, randSelector)
-
 	switch len(os.Args[1:]) {
 	case 0:
+		wl, err := wordslist.LoadWordsListFromYAML()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "failed to load repository from yaml: %v\n", err.Error())
+			os.Exit(1)
+		}
+		randSelector := random.New[wordslist.Word]()
+		wordsRepo := wordslist.NewRepository(wl, randSelector)
+
 		gh := terminal.NewGameHandler(wordsRepo, os.Stdin, os.Stdout)
 		gh.Start()
 	case 2:
