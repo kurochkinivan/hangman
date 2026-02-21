@@ -16,10 +16,6 @@
     <figcaption>Поражение. Закончились попытки.</figcaption>
 </figure>
 
-**Подсказки**
-
-![Подсказка](readme/bonus.png)
-
 ## Quick Start
 
 ```bash
