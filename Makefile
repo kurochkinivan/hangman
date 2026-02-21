@@ -2,6 +2,10 @@ COVERAGE_FILE ?= coverage.out
 
 TARGET ?= hangman
 
+.PHONY: run
+run:
+	@go run cmd/${TARGET}/main.go
+
 .PHONY: build
 build:
 	@echo "Выполняется go build для таргета ${TARGET}"
