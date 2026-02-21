@@ -6,15 +6,11 @@
 
 **Игровой процесс**
 
-<figure>
-    <img src="readme/win.png" alt="win" />
-    <figcaption>Победа. Слово отгадано.</figcaption>
-</figure>
+Победа. Слово отгадано.
+[Победа](readme/win.png)
 
-<figure>
-    <img src="readme/loss.png" alt="loss" />
-    <figcaption>Поражение. Закончились попытки.</figcaption>
-</figure>
+Поражение. Закончились попытки.
+![Поражение](readme/loss.png)
 
 ## Quick Start
 
